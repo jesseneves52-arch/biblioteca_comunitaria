@@ -5,9 +5,9 @@
 #include "funcoes.h"
 
 int main()
-{
+{   int quantidade = 0;
     char opcao[10];
-
+     Livro *acervo = NULL;
     do
     {
 
@@ -33,7 +33,7 @@ int main()
             switch (opcao[0])
             {
             case 1:
-
+                cadastrarLivro(quantidade);
                 break;
             case 2:
 

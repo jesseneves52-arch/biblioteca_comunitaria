@@ -33,7 +33,19 @@ int main()
             switch (opcao[0])
             {
             case 1:
-                cadastrarLivro(quantidade);
+                Livro *livroAux = cadastrarLivro(quantidade);
+                if(livroAux == NULL){
+                  printf("erro ao cadastrar livro\n");
+                   break;
+                }
+                if(adicionarAoVetor(&acervo, &quantidade, *livroAux))
+                {
+                   printf("Livro adicionado ao acervo com sucesso!!\n");
+                }
+                    else{
+                    printf("erro ao adicionar livro!!\n");
+                    }
+                free(livroAux);
                 break;
             case 2:
 

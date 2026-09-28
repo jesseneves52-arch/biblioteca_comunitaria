@@ -32,7 +32,7 @@ int main()
         {
             switch (opcao[0])
             {
-            case 1:
+            case '1':
                 Livro *livroAux = cadastrarLivro(quantidade);
                 if(livroAux == NULL){
                   printf("erro ao cadastrar livro\n");
@@ -47,28 +47,28 @@ int main()
                     }
                 free(livroAux);
                 break;
-            case 2:
+            case '2':
 
                 break;
-            case 3:
+            case '3':
 
                 break;
-            case 4:
+            case '4':
 
                 break;
-            case 5:
+            case '5':
 
                 break;
-            case 6:
+            case '6':
+                void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo);
+                break;
+            case '7':
 
                 break;
-            case 7:
+            case '8':
 
                 break;
-            case 8:
-
-                break;
-            case 0:
+            case '0':
 
                 break;
 
@@ -78,6 +78,6 @@ int main()
         }
 
             
-    } while (opcao == 0);
+    } while (opcao);
     
 }

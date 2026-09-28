@@ -1,5 +1,16 @@
 #ifndef FUNCOES_H
 #define FUNCOES_H
+typedef struct {
+    int dia;
+    int mes;
+    int ano;
+} Data;
+
+typedef struct {
+    char nomeLeitor[50];
+    Data dataEmprestimo;
+    int devolvido;
+} Emprestimo;
 
 typedef struct {
     int codigo;
@@ -11,18 +22,10 @@ typedef struct {
     int quantidadeEmprestimosRegistrados;
 } Livro;
 
-typedef struct {
-    int dia;
-    int mes;
-    int ano;
-} Data;
 
 
-typedef struct {
-    char nomeLeitor[50];
-    Data dataEmprestimo;
-    int devolvido;
-} Emprestimo;
+
+
 
 Livro *cadastrarLivro(int codigo);
 int adicionarAoVetor(Livro **acervo, int *quantidade, Livro novoLivro);

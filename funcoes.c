@@ -42,12 +42,13 @@ int adicionarAoVetor(Livro **acervo, int *quantidade, Livro novoLivro){
 }
 void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo){
     FILE *arquivo = fopen(nomeArquivo,"w");
-
+    
       if (arquivo == NULL)
       {
         printf("erro de memoria!\n");
         return;
       }
+      //salvamos os livros e o historico de emprestimo, pois será util para função calendario//
     for (int i = 0; i < quantidade; i++)
     {
       fprintf(arquivo,"%d;%s;%s;%s;%d;%d",
@@ -72,20 +73,41 @@ void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo){
      printf("acervo salvo com sucesso!!!\n");
 }
 
-    /*int carregarAcervo(Livro acervo[], char *nomeArquivo){
+    int carregarAcervo(Livro acervo[], char *nomeArquivo){
     FILE *arquivo = fopen(nomeArquivo,"r");
+    int quantidadeLivros = 0;
       if (arquivo == NULL)
       {
-        printf("Erro de memoria ao carregar acervo");
-        return;
+        printf("Ainda não há nenhum livro cadastrado em seu acervo!!\n");
+        return 0;
       }
-    while (fprintf())
-    {
-    
-    } 
-    
-     
+      Livro livroAux = {0};
 
-
-
-}*/
+        while (fscanf(arquivo,"%d;;;%80[^;];%50[^;];%30[^;]", 
+                      &livroAux.codigo,
+                      livroAux.titulo,
+                      livroAux.autor,
+                      livroAux.genero,
+                      &livroAux.exemplaresDisponiveis,
+                      &livroAux.quantidadeEmprestimosRegistrados) == 6)
+        {
+             if (livroAux.quantidadeEmprestimosRegistrados > 0)
+             {
+              for (int i = 0; i < livroAux.quantidadeEmprestimosRegistrados; i++)
+              {
+                fscanf(arquivo,"%50[^;];%d;%d;%d;%d",
+                       livroAux.historicoEmprestimos[i].nomeLeitor,
+                       &livroAux.historicoEmprestimos[i].dataEmprestimo.dia,
+                       &livroAux.historicoEmprestimos[i].dataEmprestimo.mes,
+                       &livroAux.historicoEmprestimos[i].dataEmprestimo.ano,
+                       &livroAux.historicoEmprestimos[i].devolvido
+                       );
+             }
+             fscanf(arquivo,"\n");
+            
+        }
+        adicionarAoVetor(&acervo,&quantidadeLivros,livroAux);  
+   }
+     fclose(arquivo);
+     return quantidadeLivros;
+}

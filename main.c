@@ -7,12 +7,20 @@
 int main()
 {   int quantidade = 0;
     char opcao[10];
+    char arquivo[] = "acervo_biblioteca.txt";
      Livro *acervo = NULL;
+    quantidade = carregarAcervo(acervo, arquivo);
+   
     do
     {
 
         getchar();
         printf("\n===========MENU===========\n");
+         if (quantidade > 0)
+    {
+        printf("foram carregados %d livros\n", quantidade);
+    }
+    
         printf("[1] - Cadastrar livro\n");
         printf("[2] - Listar livro\n");
         printf("[3] - Buscar por código\n");
@@ -60,7 +68,7 @@ int main()
 
                 break;
             case '6':
-                void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo);
+                salvarAcervo(acervo, quantidade, arquivo);
                 break;
             case '7':
 
@@ -69,7 +77,8 @@ int main()
 
                 break;
             case '0':
-
+            printf("[FECHANDO PROGRAMA...]\n");
+            exit(0);
                 break;
 
             default:
@@ -78,6 +87,6 @@ int main()
         }
 
             
-    } while (opcao);
+    } while (opcao[0] != '0');
     
 }

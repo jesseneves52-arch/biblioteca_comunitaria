@@ -46,7 +46,11 @@ void registrarEmprestimo(Livro *livro, char *nomeLeitor, int dia, int mes, int a
 }
 int devolverLivro(Livro *livro, char *nomeLeitor);
 
-int renovarEmprestimo(Livro *livro, char *nomeLeitor, int novoDia, int novoMes, int novoAno);
+int renovarEmprestimo(Livro *livro, char *nomeLeitor, int novoDia, int novoMes, int novoAno){
+
+
+  
+}
 
 int reservarLivroEmprestado(Livro *livro, char *nomeLeitor){
     if (livro->exemplaresDisponiveis > 0)

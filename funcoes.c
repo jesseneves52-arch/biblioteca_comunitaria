@@ -5,8 +5,20 @@
 #include <string.h>
 #include <time.h>
 #include "funcoes.h"
-
-Livro *cadastrarLivro(int codigo)
+int criarCodigo(Livro acervo[], int quantidade)
+{
+  int maior = 0;
+  for (int i = 0; i < quantidade; i++)
+  {
+    if (acervo[i].codigo > maior)
+    {
+      maior = acervo->codigo;
+    }
+  }
+  printf ("%d\n", quantidade);
+  return maior + 1;
+}
+Livro *cadastrarLivro(Livro acervo[], int quantidade)
 {
   Livro *livro_Retorno = (Livro *)malloc(sizeof(Livro));
   if (livro_Retorno == NULL)
@@ -15,7 +27,7 @@ Livro *cadastrarLivro(int codigo)
     return NULL;
   }
   memset(livro_Retorno, 0, sizeof(Livro));
-  livro_Retorno->codigo = codigo;
+  livro_Retorno->codigo = criarCodigo(acervo, quantidade);
   printf("Escreva o titulo da obra:\n");
   scanf(" %79[^\n]", livro_Retorno->titulo);
   printf("Autor do livro:\n");
@@ -76,7 +88,7 @@ void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo)
   printf("acervo salvo com sucesso!!!\n");
 }
 
-int carregarAcervo(Livro acervo[], char *nomeArquivo)
+int carregarAcervo(Livro **acervo, char *nomeArquivo)
 {
   FILE *arquivo = fopen(nomeArquivo, "r");
   int quantidadeLivros = 0;
@@ -86,7 +98,7 @@ int carregarAcervo(Livro acervo[], char *nomeArquivo)
   }
   Livro livroAux = {0};
 
-  while (fscanf(arquivo, "%d;;%80[^;];%50[^;];%30[^;]",
+  while (fscanf(arquivo, "%d;%79[^;];%49[^;];%29[^;];%d;%d",
                 &livroAux.codigo,
                 livroAux.titulo,
                 livroAux.autor,
@@ -98,7 +110,7 @@ int carregarAcervo(Livro acervo[], char *nomeArquivo)
     {
       for (int i = 0; i < livroAux.quantidadeEmprestimosRegistrados; i++)
       {
-        fscanf(arquivo, "%50[^;];%d;%d;%d;%d",
+        fscanf(arquivo, "%49[^;];%d;%d;%d;%d",
                livroAux.historicoEmprestimos[i].nomeLeitor,
                &livroAux.historicoEmprestimos[i].dataEmprestimo.dia,
                &livroAux.historicoEmprestimos[i].dataEmprestimo.mes,
@@ -107,7 +119,7 @@ int carregarAcervo(Livro acervo[], char *nomeArquivo)
       }
       fscanf(arquivo, "\n");
     }
-    adicionarAoVetor(&acervo, &quantidadeLivros, livroAux);
+    adicionarAoVetor(acervo, &quantidadeLivros, livroAux);
   }
   fclose(arquivo);
   return quantidadeLivros;
@@ -144,42 +156,71 @@ Livro *buscarPorCodigo(Livro acervo[], int quantidade, int codigoBuscado)
 
 void atualizarExemplaresDisponiveis(Livro *item, int novo_valor)
 {
-  if (item == NULL || novo_valor < 0){
-    printf ("Valor invalido ou o livro indisponível\n");
+  if (item == NULL || novo_valor < 0)
+  {
+    printf("Valor invalido ou o livro indisponível\n");
     return;
   }
-    item->exemplaresDisponiveis = novo_valor;
-    printf ("Exemplar atualizado!\n");
+  item->exemplaresDisponiveis = novo_valor;
+  printf("Exemplar atualizado!\n");
 }
-int removerLivro(Livro **acervo, int *quantidade, int codigo){
-Livro *vaux = *acervo;
-int aux = -1;
-for (int i=0; i<(*quantidade); i++){
-  if (vaux[i].codigo == codigo){
-    aux = i;
-    break;
-  } 
-}
-if (aux == -1) return 0;
-
-for (int i = aux; i<(*quantidade - 1); i++){
-  vaux[i] = vaux[i+1];
-}
-(*quantidade)--;
-
-if (*quantidade==0){
-  free(vaux);
-  *acervo = NULL;
-} else {
-   Livro *novo = (Livro *) realloc(vaux, (*quantidade) * sizeof(Livro));
-        if (novo != NULL) *acervo = novo;
+int removerLivro(Livro **acervo, int *quantidade, int codigo)
+{
+  Livro *vaux = *acervo;
+  int aux = -1;
+  for (int i = 0; i < (*quantidade); i++)
+  {
+    if (vaux[i].codigo == codigo)
+    {
+      aux = i;
+      break;
     }
-    return 1;
+  }
+  if (aux == -1)
+    return 0;
+
+  for (int i = aux; i < (*quantidade - 1); i++)
+  {
+    vaux[i] = vaux[i + 1];
+  }
+  (*quantidade)--;
+
+  if (*quantidade == 0)
+  {
+    free(vaux);
+    *acervo = NULL;
+  }
+  else
+  {
+    Livro *novo = (Livro *)realloc(vaux, (*quantidade) * sizeof(Livro));
+    if (novo != NULL)
+      *acervo = novo;
+  }
+  return 1;
 }
-int verificaSeLivroExiste(Livro *livro){
-    if (livro == NULL) {
-        printf("Erro: Livro nao encontrado no acervo!\n");
-        return 0; // 0 (o livro não existe)
-    }
-    return 1; // 1 (o livro existe)
+int verificaSeLivroExiste(Livro *livro)
+{
+  if (livro == NULL)
+  {
+    printf("Erro: Livro nao encontrado no acervo!\n");
+    return 0; // 0 (o livro não existe)
+  }
+  return 1; // 1 (o livro existe)
+}
+
+void liberarAcervo(Livro **acervo, int *quantidade)
+{
+  if (acervo != NULL && *acervo != NULL)
+  {
+    free(*acervo);
+    *acervo = NULL;
+    *quantidade = 0;
+    printf("Acervo liberado, pronto para receber novos livros!!\n");
+    return;
+  }
+  else
+  {
+    printf("não há nenhum livro em seu acervo\n");
+    return;
+  }
 }

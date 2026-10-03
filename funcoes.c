@@ -167,7 +167,7 @@ for (int i = aux; i<(*quantidade - 1); i++){
 }
 (*quantidade)--;
 
-if (quantidade==0){
+if (*quantidade==0){
   free(vaux);
   *acervo = NULL;
 } else {
@@ -175,4 +175,11 @@ if (quantidade==0){
         if (novo != NULL) *acervo = novo;
     }
     return 1;
+}
+int verificaSeLivroExiste(Livro *livro){
+    if (livro == NULL) {
+        printf("Erro: Livro nao encontrado no acervo!\n");
+        return 0; // 0 (o livro não existe)
+    }
+    return 1; // 1 (o livro existe)
 }

@@ -42,5 +42,8 @@ int renovarEmprestimo(Livro *livro, char *nomeLeitor, int novoDia, int novoMes, 
 int reservarLivroEmprestado(Livro *livro, char *nomeLeitor);
 float calcularMultaAtraso(Livro *livro, char *nomeLeitor, int diaAtual, int mesAtual, int anoAtual, int diasPermitidos);
 void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade);
+void dadoDoLeitor(char *nomeleitor, int* dia, int *mes, int *ano);
+void codigoLivro(int *codigo);
+int verificaSeLivroExiste(Livro *livro);
 /*ADD FUNÇÃO CALENDARIO*/
 #endif

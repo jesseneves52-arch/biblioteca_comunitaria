@@ -36,11 +36,11 @@ int main()
         printf("[7] - Carregar acervo\n");
         printf("[8] - Liberar acervo\n");
         printf("[9] - registrar emprestimos\n");
-        printf("[10]");
-        printf("[11]");
-        printf("[12]");
-        printf("[13]");
-        printf("[14]");
+        printf("[10] - renovar emprestimo\n");
+        printf("[11] - Devolução de livro\n");
+        printf("[12] - reservar livro\n");
+        printf("[13] - calcular multa por atraso de entrega\n");
+        printf("[14] - relatorio de livros mais emprestados\n");
         printf("[0]- Sair \n");
         printf("digite uma das opcoes..:");
         scanf(" %9s", opcao);
@@ -126,17 +126,13 @@ int main()
             case '9':
                 int codigoaux,dia, mes,ano;
                  char nome_leitor[50];
-                printf("digite o código do livro que será emprestado:\n");
-                scanf("%d", &codigoaux);
-                if (buscarPorCodigo(acervo,quantidade,codigoaux) == NULL){
-                    printf("erro livro não encotrado\n");
-                    break;
-                }
-                    printf("A quem o livro será emprestado:\n");
-                    scanf(" %49[^\n]", nome_leitor);
-                    printf("digite a data atual:(formato dia|mes|ano):\n");
-                    scanf ("%d %d %d", &dia, &mes, &ano);
-                    registrarEmprestimo(buscarPorCodigo(acervo, quantidade, codigoaux), nome_leitor, dia, mes, ano);
+                   codigoLivro(&codigoaux);
+                Livro *livroEncontrado = buscarPorCodigo(acervo, quantidade, codigoaux);
+              if(!verificaSeLivroExiste(livroEncontrado)){
+                  break;
+              }
+                    dadoDoLeitor(nome_leitor, &dia, &mes, &ano);
+                    registrarEmprestimo(livroEncontrado, nome_leitor, dia, mes, ano);
                 break;
             case '10':
 
@@ -145,7 +141,21 @@ int main()
 
                 break;
             case '12':
-
+             int codigoaux;
+             char nomeDoLeitor[50];
+              codigoLivro(&codigoaux);
+              Livro *livroEncontrado = buscarPorCodigo(acervo, quantidade, codigoaux);
+              if(!verificaSeLivroExiste(livroEncontrado)){
+                  break;
+              }
+              printf("quem deseja reservar o livro?:\n");
+                    scanf(" %49[^\n]", nomeDoLeitor);
+              int sucesso = reservarLivroEmprestado(livroEncontrado,nomeDoLeitor);
+               if (sucesso != -1)
+               {
+                 printf("livro registrado com sucesso, posição %d da fila", sucesso + 1);
+                 break;
+               }
                 break;
             case '13':
 

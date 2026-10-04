@@ -48,5 +48,8 @@ int verificaSeLivroExiste(Livro *livro);//
 void diminuir(char *nome);//
 int removerLeitor(Livro *livro, int indice);
 void adicionarLeitor(Livro *livro, int indiceOrigem, int indiceDestino);//
+void solicitarNome(char *nomedoLeitor);//
+void solicitarData(int* dia, int *mes, int *ano);//
+int compararDatas(Livro *livro, int diaAtual, int mesAtual,int anoAtual, int indice, int diaPermitidos);//
 /*ADD FUNÇÃO CALENDARIO*/
 #endif

@@ -9,7 +9,7 @@ int main()
 {
     SetConsoleOutputCP(CP_UTF8);
     int quantidade = 0;
-    int codigo, novo_valor, dia, mes, ano, sucesso, opcao;
+    int codigo, novo_valor, dia, mes, ano, sucesso, opcao, diasPerm;
     char nome_leitor[50];
     Livro *livroEncontrado = NULL;
     Livro *livroAux = NULL;
@@ -178,11 +178,25 @@ int main()
                  printf("livro registrado com sucesso, posição %d da fila", sucesso + 1);
                }
                 break;
-
+               
             case 13:
-
+               codigoLivro(&codigo);
+                livroEncontrado = buscarPorCodigo(acervo, quantidade, codigo);
+               if(!verificaSeLivroExiste(livroEncontrado))
+               {
+                  break;
+               }
+               printf("nome do leitor:\n");
+               solicitarNome(nome_leitor);
+               solicitarData(&dia,&mes,&ano);
+               printf("quantos dia foram permitidos para esse emprestimo?;\n");
+               scanf("%d", &diasPerm);
+               calcularMultaAtraso(livroEncontrado,nome_leitor,dia,mes,ano,diasPerm);
                 break;
                 
+            case 14:
+               relatorioLivrosMaisEmprestados(acervo, quantidade);
+               break;
             case 0:
                 printf("[FECHANDO PROGRAMA...]\n");
                 exit(0);

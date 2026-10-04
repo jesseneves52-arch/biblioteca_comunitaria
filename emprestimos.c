@@ -121,5 +121,61 @@ int reservarLivroEmprestado(Livro *livro, char *nomeLeitor){
    livro->quantidadeEmprestimosRegistrados++;
    return aux;//sucesso!
 }
-float calcularMultaAtraso(Livro *livro, char *nomeLeitor, int diaAtual, int mesAtual, int anoAtual, int diasPermitidos);
-void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade);
+float calcularMultaAtraso(Livro *livro, char *nomeLeitor, int diaAtual, int mesAtual, int anoAtual, int diasPermitidos)
+{  int atraso;
+  float valor;    
+   if(livro == NULL) return 0.0f;
+     //função que converter a data inteira em dias
+    char nomeBusca[50];
+    int indice = -1;
+    strcpy(nomeBusca, nomeLeitor);
+    diminuir(nomeBusca);
+    for (int i = 0; i < livro->quantidadeEmprestimosRegistrados; i++) {
+        char nomeHistorico[50];
+        strcpy(nomeHistorico, livro->historicoEmprestimos[i].nomeLeitor);
+        diminuir(nomeHistorico);
+        if (strcmp(nomeHistorico, nomeBusca) == 0 && indice == -1 && livro->historicoEmprestimos[i].devolvido == 0)
+        {
+           indice = i;
+          atraso = compararDatas(livro, diaAtual,mesAtual,anoAtual,indice, diasPermitidos);
+           if (atraso != 0)
+           {
+             valor = (float) atraso * 2;
+             return valor;
+           }
+        }
+       }
+       printf("nenhum leitor encontrado\n");
+       return 0.0f;
+
+}
+void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade){
+    if (quantidade == 0) {
+        printf ("Nenhum livro foi registrado.\n");
+        return;
+    }
+    Livro *copia =  (Livro *) malloc (quantidade *  sizeof(Livro));
+    if (copia == NULL){
+        printf ("Erro de memória.\n");
+        return;
+    }
+    memcpy(copia, acervo, quantidade * sizeof(Livro));
+
+    for (int i = 0; i < quantidade-1-i; i++)
+    {
+        for (int j = 0; j < quantidade-1; j++)
+        {
+            if (copia[j].quantidadeEmprestimosRegistrados < copia[j+1].quantidadeEmprestimosRegistrados){
+                Livro temp = copia[j];
+                copia[j] = copia [j+1];
+                copia[j+1] = temp;
+            }
+        }
+        
+    }
+    printf ("Lista de livros mais emprestados:\n");
+    for (int i=0; i<quantidade; i++){
+        printf ("%d. %s: %d emprestimos\n", i+1, copia[i].titulo, copia[i].quantidadeEmprestimosRegistrados);
+    }
+free (copia);
+}

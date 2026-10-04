@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcoes.h"
-
+#include <ctype.h>
 void dadoDoLeitor(char *nomeleitor, int* dia, int *mes, int *ano){
    printf("A quem o livro será emprestado:\n");
                     scanf(" %49[^\n]", nomeleitor);
@@ -10,7 +10,15 @@ void dadoDoLeitor(char *nomeleitor, int* dia, int *mes, int *ano){
 
 }
 
+
 void codigoLivro(int *codigo){
       printf("digite o código do livro que será emprestado:\n");
                 scanf("%d", codigo);
+}
+
+void diminuir(char *nome){
+      for (int i = 0; nome[i] != '\0'; i++)
+      {
+            nome[i] = tolower(nome[i]);
+      }  
 }

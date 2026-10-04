@@ -72,9 +72,11 @@ int main()
                 }
                 free(livroAux);
                 break;
+
             case 2:
                 listarTodos(acervo, quantidade);
                 break;
+
             case 3:
                 printf("digite o codigo do livro que deseja buscar: ");
                 scanf("%d", &codigo);
@@ -93,6 +95,7 @@ int main()
                     printf("Livro com código %d não encontrado.\n", codigo);
                 }
                 break;
+
             case 4: /*atualizar exemplares.*/
                 printf("Digite o codigo do livro que você queira atualizar.\n");
                 scanf("%d", &codigo);
@@ -108,6 +111,7 @@ int main()
                     printf("Livro com código %d não encontrado.\n", codigo);
                 }
                 break;
+
             case 5: /*Remover livro*/
                 printf("Digite o codigo do livro que você queira remover.\n");
                 scanf("%d", &codigo);
@@ -117,15 +121,18 @@ int main()
                     printf ("Livro não encontrado!");
                 }
                 break;
+
             case 6:
                 salvarAcervo(acervo, quantidade, arquivo);
                 break;
+
             /*case 7:
 
                 break;
             case 8:
 
                 break;*/
+
             case 9:
                 codigoLivro(&codigo);
                 livroEncontrado = buscarPorCodigo(acervo, quantidade, codigo);
@@ -142,10 +149,21 @@ int main()
                   break;
               }
                 dadoDoLeitor(nome_leitor, &dia, &mes, &ano);
+                renovarEmprestimo(livroEncontrado, nome_leitor, dia, mes, ano);
                 break;
-            /*case 11:
 
-                break;*/
+            case 11:
+              codigoLivro(&codigo);
+              livroEncontrado = buscarPorCodigo(acervo, quantidade, codigo);
+              if(!verificaSeLivroExiste(livroEncontrado)){
+                  break;
+              }
+
+              printf("Quem está devolvendo o livro?:\n");
+                    scanf(" %49[^\n]", nome_leitor);
+              devolverLivro(livroEncontrado, nome_leitor);
+                break;
+
             case 12:
             codigoLivro(&codigo);
             livroEncontrado = buscarPorCodigo(acervo, quantidade, codigo);
@@ -160,9 +178,11 @@ int main()
                  printf("livro registrado com sucesso, posição %d da fila", sucesso + 1);
                }
                 break;
+
             case 13:
 
                 break;
+                
             case 0:
                 printf("[FECHANDO PROGRAMA...]\n");
                 exit(0);

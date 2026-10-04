@@ -224,3 +224,15 @@ void liberarAcervo(Livro **acervo, int *quantidade)
     return;
   }
 }
+
+int removerLeitor(Livro *livro, int indice)
+{ 
+    memset(&livro->historicoEmprestimos[indice], 0, sizeof(livro->historicoEmprestimos[indice]));
+    return 1;
+}
+void adicionarLeitor(Livro *livro, int indiceOrigem, int indiceDestino)
+{
+    livro->historicoEmprestimos[indiceDestino] = livro->historicoEmprestimos[indiceOrigem];
+    livro->historicoEmprestimos[indiceDestino].devolvido = 0;
+    removerLeitor(livro, indiceOrigem); 
+}

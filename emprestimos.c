@@ -44,12 +44,63 @@ void registrarEmprestimo(Livro *livro, char *nomeLeitor, int dia, int mes, int a
     livro->exemplaresDisponiveis--;
     printf("emprestimo registrado com sucesso\n");
 }
-int devolverLivro(Livro *livro, char *nomeLeitor);
+int devolverLivro(Livro *livro, char *nomeLeitor){
+char nomeBusca[50];
+int indice = -1, indiceReserva = 0;
+    strcpy(nomeBusca, nomeLeitor);
+    diminuir(nomeBusca);
+    for (int i = 0; i < livro->quantidadeEmprestimosRegistrados; i++) {
+        char nomeHistorico[50];
+        strcpy(nomeHistorico, livro->historicoEmprestimos[i].nomeLeitor);
+        diminuir(nomeHistorico);
+        if (livro->historicoEmprestimos[i].devolvido == 2 && indiceReserva == 0)
+        {
+          indiceReserva = i;
+        }
+        if (strcmp(nomeHistorico, nomeBusca) == 0 && livro->historicoEmprestimos[i].devolvido == 0)
+        {
+        indice = i;
+        }
+        //ainda é preciso adicionar a função de calcular multa por atraso
+    }
+    if (indice == -1) {
+      printf("nenhuma pessoa com esse nome foi encontrada\n");
+        return 0; 
+    }
+    if (indiceReserva != 0)
+    {
+     //indice onde ele está e indice de pra onde ele vai
+     adicionarLeitor(livro,indiceReserva, indice);
+    }
+    else{
+      removerLeitor(livro, indice);
+      livro->quantidadeEmprestimosRegistrados--;
+      livro->exemplaresDisponiveis++;
+    }
+     
+}
 
 int renovarEmprestimo(Livro *livro, char *nomeLeitor, int novoDia, int novoMes, int novoAno){
+char nomeBusca[50];
+    strcpy(nomeBusca, nomeLeitor);
+    diminuir(nomeBusca); 
+    for (int i = 0; i < livro->quantidadeEmprestimosRegistrados; i++) {
+        char nomeHistorico[50];
+        strcpy(nomeHistorico, livro->historicoEmprestimos[i].nomeLeitor);
+        diminuir(nomeHistorico);
 
-
-  
+        if (strcmp(nomeHistorico, nomeBusca) == 0 && livro->historicoEmprestimos[i].devolvido == 0) {
+            
+            
+            livro->historicoEmprestimos[i].dataEmprestimo.dia = novoDia;
+            livro->historicoEmprestimos[i].dataEmprestimo.mes = novoMes;
+            livro->historicoEmprestimos[i].dataEmprestimo.ano = novoAno;
+            
+            return 1; 
+        }
+    }
+    printf("\n--Leitor não encontrado, verifique se o nome digitado está correto--\n");
+    return 0; 
 }
 
 int reservarLivroEmprestado(Livro *livro, char *nomeLeitor){

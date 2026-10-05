@@ -48,13 +48,11 @@ int main()
         printf("digite uma das opcoes..:");
         
         if (scanf("%d", &opcao) != 1){
-            scanf("%*[^\n]");
-            printf ("Opcao invalida! digite apenas numeros.\n");
+              printf ("Opcao invalida! digite apenas numeros.\n");
+            while (getchar() != '\n');
             opcao = -1;
             continue;
         }
-             scanf("%*[^\n]");
-    
             switch (opcao)
             {
             case 1:
@@ -143,7 +141,8 @@ int main()
               if(!verificaSeLivroExiste(livroEncontrado)){
                   break;
               }
-                    dadoDoLeitor(nome_leitor, &dia, &mes, &ano);
+                    solicitarData(&dia,&mes,&ano);
+                    solicitarNome(nome_leitor);
                     registrarEmprestimo(livroEncontrado, nome_leitor, dia, mes, ano);
                 break;
             case 10:
@@ -152,7 +151,8 @@ int main()
                  if(!verificaSeLivroExiste(livroEncontrado)){
                   break;
               }
-                dadoDoLeitor(nome_leitor, &dia, &mes, &ano);
+                solicitarData(&dia,&mes,&ano);
+                solicitarNome(nome_leitor);
                 renovarEmprestimo(livroEncontrado, nome_leitor, dia, mes, ano);
                 break;
 
@@ -162,9 +162,7 @@ int main()
               if(!verificaSeLivroExiste(livroEncontrado)){
                   break;
               }
-
-              printf("Quem está devolvendo o livro?:\n");
-                    scanf(" %49[^\n]", nome_leitor);
+                solicitarNome(nome_leitor);
               devolverLivro(livroEncontrado, nome_leitor);
                 break;
 
@@ -175,7 +173,7 @@ int main()
                   break;
               }
               printf("quem deseja reservar o livro?:\n");
-                    scanf(" %49[^\n]", nome_leitor);
+                    solicitarNome(nome_leitor);
               sucesso = reservarLivroEmprestado(livroEncontrado,nome_leitor);
                if (sucesso != -1)
                {
@@ -190,7 +188,6 @@ int main()
                {
                   break;
                }
-               printf("nome do leitor:\n");
                solicitarNome(nome_leitor);
                solicitarData(&dia,&mes,&ano);
                printf("quantos dia foram permitidos para esse emprestimo?;\n");

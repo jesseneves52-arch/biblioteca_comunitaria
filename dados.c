@@ -6,28 +6,44 @@ int anoBissexto(int ano)
 {
     return (ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0);
 }
-void dadoDoLeitor(char *nomeleitor, int* dia, int *mes, int *ano){
-   printf("A quem o livro será emprestado:\n");
-      scanf(" %49[^\n]", nomeleitor);
-      solicitarData(dia, mes, ano);             
-
-}
 
 void solicitarNome(char *nomedoLeitor)
 {
      printf("digite o nome do leitor:\n");
      scanf(" %49[^\n]", nomedoLeitor);
+     while (getchar() != '\n');
 }
 void solicitarData(int* dia, int *mes, int *ano)
-{  
-      printf("digite a data de emprestimo (dd mm aaaa):\n");
-      scanf("%d %d %d", dia, mes, ano);
-}
+{ 
+    printf("digite a data formato dd mm aaaa");
+    while(1){ 
+      if(scanf("%d %d %d", dia, mes, ano) != 3) {
+        printf("Entrada invalida! Digite a data apenas com numeros no formato (dd mm aaaa): ");
+        
+      }
+      else{
+            printf("data salva com sucesso!!\n");
+            return;   
+      }
+        while (getchar() != '\n'); 
+    }
+ }
 
 void codigoLivro(int *codigo){
-      printf("digite o código do livro:\n");
-                scanf("%d", codigo);
+     printf("Digite o codigo do livro:\n");
+while (1) {
+    if (scanf("%d", codigo) == 1) {
+        if (*codigo >= 0) { 
+            while (getchar() != '\n'); 
+            return;
+        } else {
+            printf("O codigo nao pode ser negativo. Tente novamente: ");
+        }
+    } else {
+        printf("Entrada invalida! Digite apenas numeros: ");
+    }
 }
+   }
 
 void diminuir(char *nome){
       for (int i = 0; nome[i] != '\0'; i++)
@@ -43,7 +59,7 @@ int dataEmDias(int dia, int mes, int ano)
  
       // soma os anos completos anteriores
       for (int a = 1900; a < ano; a++)
-      {
+      {//se ano ano bissexto for true, somamos 366 no total, caso false, somamos 365
             total += anoBissexto(a) ? 366 : 365;
       }
       if (anoBissexto(ano))

@@ -29,12 +29,29 @@ Livro *cadastrarLivro(Livro acervo[], int quantidade)
   livro_Retorno->codigo = criarCodigo(acervo, quantidade);
   printf("Escreva o titulo da obra:\n");
   scanf(" %79[^\n]", livro_Retorno->titulo);
+  while (getchar() != '\n');
+  
   printf("Autor do livro:\n");
   scanf(" %49[^\n]", livro_Retorno->autor);
+   while (getchar() != '\n');
+
   printf("Genero literario:\n");
   scanf(" %29[^\n]", livro_Retorno->genero);
-  printf("Exemplares disponiveis:\n");
-  scanf("%d", &livro_Retorno->exemplaresDisponiveis);
+  while (getchar() != '\n');
+
+  while (1) {
+    printf("Exemplares disponiveis:\n");
+    if (scanf("%d", &livro_Retorno->exemplaresDisponiveis) == 1) {
+        if (livro_Retorno->exemplaresDisponiveis >= 0) {
+            while (getchar() != '\n'); 
+            break; 
+        } else {
+            printf("Erro: A quantidade não pode ser negativa!\n");
+        }
+    } else {
+        printf("Entrada invalida! Digite apenas numeros inteiros.\n");
+    } 
+}
   livro_Retorno->quantidadeEmprestimosRegistrados = 0;
   livro_Retorno->totalEmprestimos = 0;
 
@@ -66,7 +83,7 @@ void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo)
   // salvamos os livros e o historico de emprestimo, pois será util para função calendario//
   for (int i = 0; i < quantidade; i++)
   {
-    fprintf(arquivo, ";%d;%s;%s;%s;%d;%d;%d",
+    fprintf(arquivo, "%d;%s;%s;%s;%d;%d;%d",
             acervo[i].codigo,
             acervo[i].titulo,
             acervo[i].autor,
@@ -100,7 +117,7 @@ int carregarAcervo(Livro **acervo, char *nomeArquivo)
   }
   Livro livroAux = {0};
 
-  while (fscanf(arquivo, ";%d;%79[^;];%49[^;];%29[^;];%d;%d;%d",
+  while (fscanf(arquivo, " %d;%79[^;];%49[^;];%29[^;];%d;%d;%d",
                 &livroAux.codigo,
                 livroAux.titulo,
                 livroAux.autor,
@@ -109,6 +126,7 @@ int carregarAcervo(Livro **acervo, char *nomeArquivo)
                 &livroAux.quantidadeEmprestimosRegistrados,
                 &livroAux.totalEmprestimos) == 7)
   {
+    memset(livroAux.historicoEmprestimos, 0, sizeof(livroAux.historicoEmprestimos));
     if (livroAux.quantidadeEmprestimosRegistrados > 0)
     {
       for (int i = 0; i < livroAux.quantidadeEmprestimosRegistrados; i++)
@@ -120,8 +138,10 @@ int carregarAcervo(Livro **acervo, char *nomeArquivo)
                &livroAux.historicoEmprestimos[i].dataEmprestimo.ano,
                &livroAux.historicoEmprestimos[i].devolvido);
       }
-      fscanf(arquivo, "\n");
+      
     }
+    fscanf(arquivo, "%*[^\n]"); 
+    fgetc(arquivo); 
     adicionarAoVetor(acervo, &quantidadeLivros, livroAux);
   }
   fclose(arquivo);

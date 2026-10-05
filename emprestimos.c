@@ -23,7 +23,7 @@ void registrarEmprestimo(Livro *livro, char *nomeLeitor, int dia, int mes, int a
        switch (opcao)
        {
         case 's':
-           if(reservarLivroEmprestado(livro, nomeLeitor)){
+           if(reservarLivroEmprestado(livro, nomeLeitor) != -1){
             printf("livro reservado com sucesso! Aguarde\n");
             return;
            }
@@ -178,25 +178,30 @@ void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade){
         printf ("Nenhum livro foi registrado.\n");
         return;
     }
-    Livro *copia =  (Livro *) malloc (quantidade *  sizeof(Livro));
-    if (copia == NULL){
-        printf ("Erro de memória.\n");
-        return;
+    Livro *copia = malloc(quantidade * sizeof(Livro));
+    int trocou;
+    if (copia == NULL) return;
+
+    for (int i = 0; i < quantidade; i++) {
+        copia[i] = acervo[i];
     }
-    memcpy(copia, acervo, quantidade * sizeof(Livro));
 
     for (int i = 0; i < quantidade-1; i++)
-    {
-        for (int j = 0; j < quantidade-1; j++)
+    { trocou = 0;
+        for (int j = 0; j < quantidade - i -1; j++)
         {
             if (copia[j].totalEmprestimos < copia[j+1].totalEmprestimos){
                 Livro temp = copia[j];
                 copia[j] = copia [j+1];
                 copia[j+1] = temp;
+                trocou = 1;
             }
         }
-        
+         if (!trocou){
+            printf("organização completa!!\n");
+         }
     }
+   
     printf ("Lista de livros mais emprestados:\n");
     for (int i=0; i<quantidade; i++){
         printf ("%d. %s: %d emprestimos\n", i+1, copia[i].titulo, copia[i].totalEmprestimos);

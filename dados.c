@@ -13,19 +13,26 @@ void solicitarNome(char *nomedoLeitor)
      scanf(" %49[^\n]", nomedoLeitor);
      while (getchar() != '\n');
 }
+int dataValida(int dia, int mes, int ano)
+{
+    int diasNoMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (ano < 1900 || ano > 2100 || mes < 1 || mes > 12) return 0;
+    if (anoBissexto(ano)) diasNoMes[1] = 29;
+    return dia >= 1 && dia <= diasNoMes[mes - 1];
+}
 void solicitarData(int* dia, int *mes, int *ano)
 { 
     printf("digite a data formato dd mm aaaa");
     while(1){ 
-      if(scanf("%d %d %d", dia, mes, ano) != 3) {
-        printf("Entrada invalida! Digite a data apenas com numeros no formato (dd mm aaaa): ");
+      if(scanf("%d %d %d", dia, mes, ano) == 3 && dataValida(*dia, *mes, *ano)) {
+       while (getchar() != '\n');
+       return;
         
       }
       else{
-            printf("data salva com sucesso!!\n");
-            return;   
+      printf("data invalida, digite novamente no formato dd mm aaaa\n");
+      while (getchar() != '\n');  
       }
-        while (getchar() != '\n'); 
     }
  }
 
@@ -38,9 +45,11 @@ while (1) {
             return;
         } else {
             printf("O codigo nao pode ser negativo. Tente novamente: ");
+            while (getchar() != '\n');
         }
     } else {
         printf("Entrada invalida! Digite apenas numeros: ");
+        while (getchar() != '\n');
     }
 }
    }

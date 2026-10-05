@@ -43,13 +43,15 @@ Livro *cadastrarLivro(Livro acervo[], int quantidade)
     printf("Exemplares disponiveis:\n");
     if (scanf("%d", &livro_Retorno->exemplaresDisponiveis) == 1) {
         if (livro_Retorno->exemplaresDisponiveis >= 0) {
-            while (getchar() != '\n'); 
+          
             break; 
         } else {
             printf("Erro: A quantidade não pode ser negativa!\n");
+          
         }
     } else {
         printf("Entrada invalida! Digite apenas numeros inteiros.\n");
+        while (getchar() != '\n');
     } 
 }
   livro_Retorno->quantidadeEmprestimosRegistrados = 0;
@@ -238,7 +240,7 @@ void liberarAcervo(Livro **acervo, int *quantidade)
     free(*acervo);
     *acervo = NULL;
     *quantidade = 0;
-    printf("Acervo liberado, pronto para receber novos livros!!\n");
+    
     return;
   }
   else

@@ -4,6 +4,7 @@
 #include <time.h>
 #include <windows.h>
 #include "funcoes.h"
+#include <ctype.h>
 
 int main()
 {
@@ -78,8 +79,7 @@ int main()
                 break;
 
             case 3:
-                printf("digite o codigo do livro que deseja buscar: ");
-                scanf("%d", &codigo);
+                codigoLivro(&codigo);
                 livroEncontrado = buscarPorCodigo(acervo, quantidade, codigo);
                 if (livroEncontrado != NULL)
                 {
@@ -97,13 +97,16 @@ int main()
                 break;
 
             case 4: /*atualizar exemplares.*/
-                printf("Digite o codigo do livro que você queira atualizar.\n");
-                scanf("%d", &codigo);
+                codigoLivro(&codigo);
                 livroEncontrado = buscarPorCodigo(acervo, quantidade, codigo);
                 if (livroEncontrado != NULL)
                 {
                     printf ("Novo numero de exemplares:\n");
-                    scanf ("%d", &novo_valor);
+                    if (scanf("%d", &novo_valor) !=1){
+                        printf("entrada invalida, digite apenas numeros\n");
+                        while (getchar() != '\n');
+                        break;
+                    }
                     atualizarExemplaresDisponiveis (livroEncontrado, novo_valor);
                 }
                 else
@@ -113,12 +116,11 @@ int main()
                 break;
 
             case 5: /*Remover livro*/
-                printf("Digite o codigo do livro que você queira remover.\n");
-                scanf("%d", &codigo);
+                codigoLivro(&codigo);
                 if (removerLivro(&acervo, &quantidade, codigo)){
-                    printf ("Livro removido com sucesso!");
+                    printf ("Livro removido com sucesso!\n");
                 } else {
-                    printf ("Livro não encontrado!");
+                    printf ("Livro não encontrado!\n");
                 }
                 break;
 
@@ -133,6 +135,7 @@ int main()
                 
             case 8:
                 liberarAcervo (&acervo, &quantidade);
+                printf("Acervo liberado, pronto para receber novos livros!!\n");
                 break;
 
             case 9:
@@ -191,11 +194,23 @@ int main()
                solicitarNome(nome_leitor);
                solicitarData(&dia,&mes,&ano);
                printf("quantos dia foram permitidos para esse emprestimo?;\n");
-               scanf("%d", &diasPerm);
+               if (scanf("%d", &diasPerm) != 1)
+               {
+                   printf("entrada invalida, digite apenas numeros\n");
+                   while (getchar() != '\n');
+                   break;
+               }
                multa = calcularMultaAtraso(livroEncontrado,nome_leitor,dia,mes,ano,diasPerm);
+               if (multa < 0) {
+                printf("leitor nao encontrado.\n");
+                }
+               else if (multa ==0) {
+               printf ("Sem atraso, nenhuma multa a pagar.\n");
+                } else {
                printf("valor a pagar pelos dias atrasados: %.2f", multa);
+                }
                 break;
-                
+            
             case 14:
                relatorioLivrosMaisEmprestados(acervo, quantidade);
                break;

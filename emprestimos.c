@@ -199,6 +199,7 @@ void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade){
         }
          if (!trocou){
             printf("organização completa!!\n");
+            break; 
          }
     }
    

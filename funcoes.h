@@ -20,13 +20,14 @@ typedef struct {
     int exemplaresDisponiveis;
     Emprestimo historicoEmprestimos[5];
     int quantidadeEmprestimosRegistrados;
+    int totalEmprestimos;
 } Livro;
 
 
 
 
 
-int proximoCodigo(Livro acervo[], int quantidade);
+int criarCodigo(Livro acervo[], int quantidade);
 Livro *cadastrarLivro(Livro acervo[], int quantidade);//
 int adicionarAoVetor(Livro **acervo, int *quantidade, Livro novoLivro);//
 void listarTodos(Livro acervo[], int quantidade);//

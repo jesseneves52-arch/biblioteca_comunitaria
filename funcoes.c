@@ -12,10 +12,9 @@ int criarCodigo(Livro acervo[], int quantidade)
   {
     if (acervo[i].codigo > maior)
     {
-      maior = acervo->codigo;
+      maior = acervo[i].codigo;
     }
   }
-  printf ("%d\n", quantidade);
   return maior + 1;
 }
 Livro *cadastrarLivro(Livro acervo[], int quantidade)
@@ -37,6 +36,7 @@ Livro *cadastrarLivro(Livro acervo[], int quantidade)
   printf("Exemplares disponiveis:\n");
   scanf("%d", &livro_Retorno->exemplaresDisponiveis);
   livro_Retorno->quantidadeEmprestimosRegistrados = 0;
+  livro_Retorno->totalEmprestimos = 0;
 
   return livro_Retorno;
 }
@@ -66,16 +66,18 @@ void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo)
   // salvamos os livros e o historico de emprestimo, pois será util para função calendario//
   for (int i = 0; i < quantidade; i++)
   {
-    fprintf(arquivo, "%d;%s;%s;%s;%d;%d",
+    fprintf(arquivo, ";%d;%s;%s;%s;%d;%d;%d",
             acervo[i].codigo,
             acervo[i].titulo,
             acervo[i].autor,
             acervo[i].genero,
             acervo[i].exemplaresDisponiveis,
-            acervo[i].quantidadeEmprestimosRegistrados);
+            acervo[i].quantidadeEmprestimosRegistrados,
+            acervo[i].totalEmprestimos);
+            
     for (int j = 0; j < acervo[i].quantidadeEmprestimosRegistrados; j++)
     {
-      fprintf(arquivo, "%s;%d;%d;%d;%d",
+      fprintf(arquivo, ";%s;%d;%d;%d;%d",
               acervo[i].historicoEmprestimos[j].nomeLeitor,
               acervo[i].historicoEmprestimos[j].dataEmprestimo.dia,
               acervo[i].historicoEmprestimos[j].dataEmprestimo.mes,
@@ -98,19 +100,20 @@ int carregarAcervo(Livro **acervo, char *nomeArquivo)
   }
   Livro livroAux = {0};
 
-  while (fscanf(arquivo, "%d;%79[^;];%49[^;];%29[^;];%d;%d",
+  while (fscanf(arquivo, ";%d;%79[^;];%49[^;];%29[^;];%d;%d;%d",
                 &livroAux.codigo,
                 livroAux.titulo,
                 livroAux.autor,
                 livroAux.genero,
                 &livroAux.exemplaresDisponiveis,
-                &livroAux.quantidadeEmprestimosRegistrados) == 6)
+                &livroAux.quantidadeEmprestimosRegistrados,
+                &livroAux.totalEmprestimos) == 7)
   {
     if (livroAux.quantidadeEmprestimosRegistrados > 0)
     {
       for (int i = 0; i < livroAux.quantidadeEmprestimosRegistrados; i++)
       {
-        fscanf(arquivo, "%49[^;];%d;%d;%d;%d",
+        fscanf(arquivo, ";%49[^;];%d;%d;%d;%d",
                livroAux.historicoEmprestimos[i].nomeLeitor,
                &livroAux.historicoEmprestimos[i].dataEmprestimo.dia,
                &livroAux.historicoEmprestimos[i].dataEmprestimo.mes,
@@ -227,8 +230,19 @@ void liberarAcervo(Livro **acervo, int *quantidade)
 
 int removerLeitor(Livro *livro, int indice)
 { 
-    memset(&livro->historicoEmprestimos[indice], 0, sizeof(livro->historicoEmprestimos[indice]));
-    return 1;
+  int n = livro->quantidadeEmprestimosRegistrados;
+  if (indice < 0 || indice >= n)
+  {
+    printf("Indice invalido para remover leitor.\n");
+    return 0;
+  }
+  for (int i = indice; i < n - 1; i++)
+  {
+    livro->historicoEmprestimos[i] = livro->historicoEmprestimos[i + 1];
+  }
+  memset(&livro->historicoEmprestimos[n - 1], 0, sizeof(livro->historicoEmprestimos[n - 1]));
+  livro->quantidadeEmprestimosRegistrados--;
+  return 1;
 }
 void adicionarLeitor(Livro *livro, int indiceOrigem, int indiceDestino)
 {

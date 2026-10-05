@@ -8,7 +8,9 @@
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
+    char salvar;
     int quantidade = 0;
+    float multa;
     int codigo, novo_valor, dia, mes, ano, sucesso, opcao, diasPerm;
     char nome_leitor[50];
     Livro *livroEncontrado = NULL;
@@ -126,12 +128,14 @@ int main()
                 salvarAcervo(acervo, quantidade, arquivo);
                 break;
 
-            /*case 7:
-
+            case 7:
+                liberarAcervo(&acervo, &quantidade);
+                quantidade = carregarAcervo(&acervo, arquivo);   
                 break;
+                
             case 8:
-
-                break;*/
+                liberarAcervo (&acervo, &quantidade);
+                break;
 
             case 9:
                 codigoLivro(&codigo);
@@ -191,13 +195,26 @@ int main()
                solicitarData(&dia,&mes,&ano);
                printf("quantos dia foram permitidos para esse emprestimo?;\n");
                scanf("%d", &diasPerm);
-               calcularMultaAtraso(livroEncontrado,nome_leitor,dia,mes,ano,diasPerm);
+               multa = calcularMultaAtraso(livroEncontrado,nome_leitor,dia,mes,ano,diasPerm);
+               printf("valor a pagar pelos dias atrasados: %.2f", multa);
                 break;
                 
             case 14:
                relatorioLivrosMaisEmprestados(acervo, quantidade);
                break;
             case 0:
+                printf ("Deseja salvar o acervo antes de sair? [s/n] : ");
+                scanf  (" %c", &salvar);
+                scanf("%*[^\n]");
+                salvar = tolower(salvar);
+                if (salvar == 's')
+                {
+                    salvarAcervo(acervo, quantidade, arquivo);
+                }
+                if (salvar == 'n')
+                {
+                    printf ("Acervo não salvo!\n");
+                }
                 printf("[FECHANDO PROGRAMA...]\n");
                 exit(0);
                 break;

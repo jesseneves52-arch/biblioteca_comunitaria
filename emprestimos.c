@@ -11,12 +11,12 @@
 void registrarEmprestimo(Livro *livro, char *nomeLeitor, int dia, int mes, int ano){
     char opcao;
     if(livro->quantidadeEmprestimosRegistrados >= 5){
-         printf("fila de espera para reservar livro cheia, aguarde!!\n"); 
+         printf("Fila de espera para reservar livro cheia, aguarde!!\n"); 
          return;  
     }
       if (livro->exemplaresDisponiveis <= 0)
     {
-       printf("nenhum exemplar disponivel para emprestimo, reservar livro?[s/n]");
+       printf("Nenhum exemplar disponível para emprestimo, reservar livro?[s/n]\n");
        scanf(" %c", &opcao);
        scanf("%*[^\n]");
        opcao = tolower(opcao);
@@ -24,13 +24,13 @@ void registrarEmprestimo(Livro *livro, char *nomeLeitor, int dia, int mes, int a
        {
         case 's':
            if(reservarLivroEmprestado(livro, nomeLeitor) != -1){
-            printf("livro reservado com sucesso! Aguarde\n");
+            printf("Livro reservado com sucesso! Aguarde\n");
             return;
            }
         case 'n':
             return;
         default:
-            printf("opcao invalida\n");
+            printf("[ERRO] Opção inválida.\n");
             return;
        }
     }
@@ -45,7 +45,7 @@ void registrarEmprestimo(Livro *livro, char *nomeLeitor, int dia, int mes, int a
     livro->quantidadeEmprestimosRegistrados++;
     livro->totalEmprestimos++;
     livro->exemplaresDisponiveis--;
-    printf("emprestimo registrado com sucesso\n");
+    printf("Emprestimo registrado com sucesso\n");
 }
 int devolverLivro(Livro *livro, char *nomeLeitor){
 char nomeBusca[50];
@@ -67,7 +67,7 @@ int indice = -1, indiceReserva = -1;
     
     }
     if (indice == -1) {
-      printf("Nenhuma pessoa com esse nome foi encontrada\n");
+      printf("[ERRO] Nenhuma pessoa com esse nome foi encontrada\n");
         return 0; 
     }
     if (indiceReserva != -1)
@@ -85,13 +85,13 @@ int indice = -1, indiceReserva = -1;
     e->dataEmprestimo.mes = h->tm_mon + 1;
     e->dataEmprestimo.ano = h->tm_year + 1900;
     livro->totalEmprestimos++;
-    printf("livro repassado para %s\n", e->nomeLeitor);
+    printf("Livro repassado para %s\n", e->nomeLeitor);
     }
     else{
       removerLeitor(livro, indice);
       livro->exemplaresDisponiveis++;
     }
-    printf("livro devolvido com sucesso\n");
+    printf("Livro devolvido com sucesso\n");
     return 1;
 }
 
@@ -114,19 +114,19 @@ char nomeBusca[50];
             return 1; 
         }
     }
-    printf("\n--Leitor não encontrado, verifique se o nome digitado está correto--\n");
+    printf("\n--[ERRO] Leitor não encontrado, verifique se o nome digitado está correto--\n");
     return 0; 
 }
 
 int reservarLivroEmprestado(Livro *livro, char *nomeLeitor){
     if (livro->exemplaresDisponiveis > 0)
   {
-     printf("ainda há exemplares disponiveis\n");
+     printf("Ainda há exemplares disponiveis\n");
      return -1;
   }
     if (livro->quantidadeEmprestimosRegistrados >= 5)
   {
-    printf("maximo de emprestimos registrado!!\n");
+    printf("[ERRO] Máximo de emprestimos registrado!!\n");
     return -1;
   }
   char nomeBusca[50];
@@ -169,13 +169,13 @@ float calcularMultaAtraso(Livro *livro, char *nomeLeitor, int diaAtual, int mesA
             return atraso * 2.5f;
         }
        }
-       printf("nenhum leitor encontrado\n");
+       printf("\n[ERRO] Nenhum leitor encontrado\n");
        return -1.0f;
 
 }
 void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade){
     if (quantidade == 0) {
-        printf ("Nenhum livro foi registrado.\n");
+        printf ("\n[ERRO] Nenhum livro foi registrado.\n");
         return;
     }
     Livro *copia = malloc(quantidade * sizeof(Livro));
@@ -198,16 +198,20 @@ void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade){
             }
         }
          if (!trocou){
-            printf("organização completa!!\n");
+            printf("Organização completa!!\n");
             break; 
          }
     }
    
-    printf ("Lista de livros mais emprestados:\n");
-    for (int i=0; i<quantidade; i++){
-        printf ("%d. %s: %d emprestimos\n", i+1, copia[i].titulo, copia[i].totalEmprestimos);
+    printf("\nLIVROS MAIS EMPRESTADOS\n");
+    printf("--------------------------\n");
+    for (int i = 0; i < quantidade; i++)
+    {
+        printf("  %-3d. %-60s %d empréstimos\n", i + 1, copia[i].titulo, copia[i].totalEmprestimos);
     }
-free (copia);
+    printf("--------------------------\n");
+
+    free(copia);
 }
 
 void estatiscasDoAcervo (Livro acervo[], int quantidade){
@@ -230,10 +234,11 @@ void estatiscasDoAcervo (Livro acervo[], int quantidade){
             }
       }
 }
-    printf ("Estatistica do acervo:\n");
-    printf("Livros cadastrados: %d\n", quantidade);
-    printf("Exemplares disponiveis: %d\n", exemplaresDisponiveis);
-    printf("Emprestimos ativos: %d\n", emprestimosAtivos);
-    printf("Pessoas na fila de espera: %d\n", pessoasNaFila);
-    printf("Total de emprestimos realizados: %d\n", totalEmprestimos);
+    printf("\nESTATÍSTICAS DO ACERVO\n");
+    printf("--------------------------\n");
+    printf("  Livros cadastrados       : %d\n", quantidade);
+    printf("  Exemplares disponíveis   : %d\n", exemplaresDisponiveis);
+    printf("  Empréstimos ativos       : %d\n", emprestimosAtivos);
+    printf("  Pessoas na fila de espera: %d\n", pessoasNaFila);
+    printf("  Total de empréstimos     : %d\n", totalEmprestimos);  
 }

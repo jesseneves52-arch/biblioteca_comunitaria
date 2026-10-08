@@ -5,6 +5,12 @@
 #include <string.h>
 #include <time.h>
 #include "funcoes.h"
+
+void pausarEContinuar()
+{
+    printf("\n\nPressione ENTER para continuar...");
+    while (getchar() != '\n');
+}
 int criarCodigo(Livro acervo[], int quantidade)
 {
   int maior = 0;
@@ -22,7 +28,7 @@ Livro *cadastrarLivro(Livro acervo[], int quantidade)
   Livro *livro_Retorno = (Livro *)malloc(sizeof(Livro));
   if (livro_Retorno == NULL)
   {
-    printf("Erro ao criar livro\n");
+    printf("[ERRO] Falha ao criar livro.\n");
     return NULL;
   }
   memset(livro_Retorno, 0, sizeof(Livro));
@@ -46,11 +52,11 @@ Livro *cadastrarLivro(Livro acervo[], int quantidade)
           
             break; 
         } else {
-            printf("Erro: A quantidade não pode ser negativa!\n");
+            printf("[ERRO] A quantidade não pode ser negativa!\n");
           
         }
     } else {
-        printf("Entrada invalida! Digite apenas numeros inteiros.\n");
+        printf("[ERRO] Entrada inválida. Digite apenas números inteiros.\n");
         while (getchar() != '\n');
     } 
 }
@@ -65,7 +71,7 @@ int adicionarAoVetor(Livro **acervo, int *quantidade, Livro novoLivro)
   Livro *novoAcervo = (Livro *)realloc(*acervo, novaQtd * (sizeof(Livro)));
   if (novoAcervo == NULL)
   {
-    printf("erro de memoria ao aumentar acervo\n");
+    printf("[ERRO] Falha de memória ao aumentar acervo.\n");
     return 0;
   }
   *acervo = novoAcervo;
@@ -79,7 +85,7 @@ void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo)
 
   if (arquivo == NULL)
   {
-    printf("erro de memoria!\n");
+    printf("[ERRO] Falha ao abrir arquivo.\n");
     return;
   }
   // salvamos os livros e o historico de emprestimo, pois será util para função calendario//
@@ -106,7 +112,7 @@ void salvarAcervo(Livro acervo[], int quantidade, char *nomeArquivo)
     fprintf(arquivo, "\n");
   }
   fclose(arquivo);
-  printf("acervo salvo com sucesso!!!\n");
+  printf("Acervo salvo com sucesso!!!\n");
 }
 
 int carregarAcervo(Livro **acervo, char *nomeArquivo)
@@ -156,16 +162,19 @@ void listarTodos(Livro acervo[], int quantidade)
     printf("Nenhum livro cadastrado!\n");
     return;
   }
+printf("\n========================== ACERVO ==========================\n");
   for (int i = 0; i < quantidade; i++)
   {
-    printf("Codigo: %d\n", acervo[i].codigo);
-    printf("Titulo: %s\n", acervo[i].titulo);
-    printf("Autor: %s\n", acervo[i].autor);
-    printf("Genero: %s\n", acervo[i].genero);
-    printf("Exemplares disponiveis: %d\n", acervo[i].exemplaresDisponiveis);
-    printf("Quantidade de emprestimos registrados: %d\n", acervo[i].quantidadeEmprestimosRegistrados);
-    printf("\n");
+ printf("\nLivro %d:\n", i + 1);
+    printf("  Código                  : %d\n", acervo[i].codigo);
+    printf("  Título                  : %s\n", acervo[i].titulo);
+    printf("  Autor                   : %s\n", acervo[i].autor);
+    printf("  Gênero                  : %s\n", acervo[i].genero);
+    printf("  Exemplares disponíveis  : %d\n", acervo[i].exemplaresDisponiveis);
+    printf("  Empréstimos registrados : %d\n", acervo[i].quantidadeEmprestimosRegistrados);
+    printf("==============================================================\n");
   }
+
 }
 Livro *buscarPorCodigo(Livro acervo[], int quantidade, int codigoBuscado)
 {
@@ -183,7 +192,7 @@ void atualizarExemplaresDisponiveis(Livro *item, int novo_valor)
 {
   if (item == NULL || novo_valor < 0)
   {
-    printf("Valor invalido ou o livro indisponível\n");
+    printf("[ERRO] Valor inválido ou o livro está indisponível.\n");
     return;
   }
   item->exemplaresDisponiveis = novo_valor;
@@ -227,7 +236,7 @@ int verificaSeLivroExiste(Livro *livro)
 {
   if (livro == NULL)
   {
-    printf("Erro: Livro nao encontrado no acervo!\n");
+    printf("[ERRO] Livro não encontrado no acervo!\n");
     return 0; // 0 (o livro não existe)
   }
   return 1; // 1 (o livro existe)
@@ -245,7 +254,7 @@ void liberarAcervo(Livro **acervo, int *quantidade)
   }
   else
   {
-    printf("não há nenhum livro em seu acervo\n");
+    printf("Não há nenhum livro em seu acervo\n");
     return;
   }
 }
@@ -255,7 +264,7 @@ int removerLeitor(Livro *livro, int indice)
   int n = livro->quantidadeEmprestimosRegistrados;
   if (indice < 0 || indice >= n)
   {
-    printf("Indice invalido para remover leitor.\n");
+    printf("[ERRO] Índice inválido para remover leitor.\n");
     return 0;
   }
   for (int i = indice; i < n - 1; i++)
@@ -271,4 +280,11 @@ void adicionarLeitor(Livro *livro, int indiceOrigem, int indiceDestino)
     livro->historicoEmprestimos[indiceDestino] = livro->historicoEmprestimos[indiceOrigem];
     livro->historicoEmprestimos[indiceDestino].devolvido = 0;
     removerLeitor(livro, indiceOrigem); 
+}
+void limparTela(){
+  #ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
 }

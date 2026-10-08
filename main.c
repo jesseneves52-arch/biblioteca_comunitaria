@@ -8,7 +8,11 @@
 
 int main()
 {
+
+#ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
+#endif
+
     char salvar;
     int quantidade = 0;
     float multa;
@@ -22,61 +26,67 @@ int main()
 
     do
     {
+        limparTela();
         if (quantidade > 0)
         {
-            printf("foram carregados %d livros\n", quantidade);
+            printf("%d livros carregados.\n", quantidade);
         }
         else
         {
-            printf("Nenhum livro salvo no acervo\n");
+            printf(" Nenhum livro salvo no acervo.\n");
         }
-        printf("\n===========MENU===========\n");
-        printf("[1] - Cadastrar livro\n");
-        printf("[2] - Listar livros\n");
-        printf("[3] - Buscar por código\n");
-        printf("[4] - Atualizar Exemplares\n");
-        printf("[5] - Remover livro\n");
-        printf("[6] - Salvar acervo\n");
-        printf("[7] - Carregar acervo\n");
-        printf("[8] - Liberar acervo\n");
-        printf("[9] - registrar emprestimos\n");
-        printf("[10] - renovar emprestimo\n");
-        printf("[11] - Devolução de livro\n");
-        printf("[12] - reservar livro\n");
-        printf("[13] - calcular multa por atraso de entrega\n");
-        printf("[14] - relatorio de livros mais emprestados\n");
-        printf("[15] - Estatísticas do acervo\n");
-        printf("[0]- Sair \n");
-        printf("digite uma das opcoes..:");
-        
+        printf("\n========================================\n");
+        printf("              MENU PRINCIPAL           \n");
+        printf("========================================\n");
+        printf("  %2d. Cadastrar livro\n", 1);
+        printf("  %2d. Listar livros\n", 2);
+        printf("  %2d. Buscar por código\n", 3);
+        printf("  %2d. Atualizar exemplares\n", 4);
+        printf("  %2d. Remover livro\n", 5);
+        printf("  %2d. Salvar acervo\n", 6);
+        printf("  %2d. Carregar acervo\n", 7);
+        printf("  %2d. Liberar acervo\n", 8);
+        printf("  %2d. Registrar empréstimos\n", 9);
+        printf("  %2d. Renovar empréstimo\n", 10);
+        printf("  %2d. Devolução de livro\n", 11);
+        printf("  %2d. Reservar livro\n", 12);
+        printf("  %2d. Calcular multa por atraso\n", 13);
+        printf("  %2d. Relatório de mais emprestados\n", 14);
+        printf("  %2d. Estatísticas do acervo\n", 15);
+        printf("  %2d. Sair\n", 0);
+        printf("----------------------------------------\n");
+        printf("Digite uma das opcoes: ");
         if (scanf("%d", &opcao) != 1){
-              printf ("Opcao invalida! digite apenas numeros.\n");
+              printf("[ERRO] Opção inválida. Digite apenas números.\n");
             while (getchar() != '\n');
             opcao = -1;
             continue;
         }
+        while (getchar() != '\n');
             switch (opcao)
             {
             case 1:
                 livroAux = cadastrarLivro(acervo, quantidade);
                 if (livroAux == NULL)
                 {
-                    printf("erro ao cadastrar livro\n");
+                    printf("[ERRO] Falha ao cadastrar livro.\n");
                     break;
                 }
                 if (adicionarAoVetor(&acervo, &quantidade, *livroAux))
                 {
-                    printf("Livro adicionado ao acervo com sucesso!!\n");
+                    printf("Livro adicionado ao acervo.\n");
                 }
                 else
                 {
-                    printf("erro ao adicionar livro!!\n");
+                    printf("[ERRO] Falha ao adicionar livro.\n");
                 }
                 free(livroAux);
+                pausarEContinuar();
                 break;
 
             case 2:
                 listarTodos(acervo, quantidade);
+                pausarEContinuar();
                 break;
 
             case 3:
@@ -84,17 +94,19 @@ int main()
                 livroEncontrado = buscarPorCodigo(acervo, quantidade, codigo);
                 if (livroEncontrado != NULL)
                 {
-                    printf("Livro encontrado:\n");
-                    printf("Código: %d\n", livroEncontrado->codigo);
-                    printf("Título: %s\n", livroEncontrado->titulo);
-                    printf("Autor: %s\n", livroEncontrado->autor);
-                    printf("Gênero: %s\n", livroEncontrado->genero);
-                    printf("Exemplares disponíveis: %d\n", livroEncontrado->exemplaresDisponiveis);
+                    printf("\nLIVRO ENCONTRADO\n");
+                    printf("--------------------\n");
+                    printf("  Código               : %d\n", livroEncontrado->codigo);
+                    printf("  Título               : %s\n", livroEncontrado->titulo);
+                    printf("  Autor                : %s\n", livroEncontrado->autor);
+                    printf("  Gênero               : %s\n", livroEncontrado->genero);
+                   printf("  Exemplares disponíveis: %d\n", livroEncontrado->exemplaresDisponiveis);
                 }
                 else
                 {
-                    printf("Livro com código %d não encontrado.\n", codigo);
+                    printf("[ERRO] Livro com código %d não encontrado.\n", codigo);
                 }
+                pausarEContinuar();
                 break;
 
             case 4: /*atualizar exemplares.*/
@@ -104,7 +116,7 @@ int main()
                 {
                     printf ("Novo numero de exemplares:\n");
                     if (scanf("%d", &novo_valor) !=1){
-                        printf("entrada invalida, digite apenas numeros\n");
+                        printf("[ERRO] Entrada inválida. Digite apenas números.\n");
                         while (getchar() != '\n');
                         break;
                     }
@@ -112,31 +124,36 @@ int main()
                 }
                 else
                 {
-                    printf("Livro com código %d não encontrado.\n", codigo);
+                    printf("[ERRO] Livro com código %d não encontrado.\n", codigo);
                 }
+                pausarEContinuar();
                 break;
 
             case 5: /*Remover livro*/
                 codigoLivro(&codigo);
                 if (removerLivro(&acervo, &quantidade, codigo)){
-                    printf ("Livro removido com sucesso!\n");
+                    printf ("Livro removido.\n");
                 } else {
-                    printf ("Livro não encontrado!\n");
+                    printf ("[ERRO] Livro não encontrado.\n");
                 }
+                pausarEContinuar();
                 break;
 
             case 6:
                 salvarAcervo(acervo, quantidade, arquivo);
+                pausarEContinuar();
                 break;
 
             case 7:
                 liberarAcervo(&acervo, &quantidade);
-                quantidade = carregarAcervo(&acervo, arquivo);   
+                quantidade = carregarAcervo(&acervo, arquivo);
+                pausarEContinuar();
                 break;
                 
             case 8:
                 liberarAcervo (&acervo, &quantidade);
-                printf("Acervo liberado, pronto para receber novos livros!!\n");
+                printf("Acervo liberado.\n");
+                pausarEContinuar();
                 break;
 
             case 9:
@@ -148,6 +165,7 @@ int main()
                     solicitarData(&dia,&mes,&ano);
                     solicitarNome(nome_leitor);
                     registrarEmprestimo(livroEncontrado, nome_leitor, dia, mes, ano);
+                pausarEContinuar();
                 break;
             case 10:
                 codigoLivro(&codigo);
@@ -158,6 +176,7 @@ int main()
                 solicitarData(&dia,&mes,&ano);
                 solicitarNome(nome_leitor);
                 renovarEmprestimo(livroEncontrado, nome_leitor, dia, mes, ano);
+                pausarEContinuar();
                 break;
 
             case 11:
@@ -168,6 +187,7 @@ int main()
               }
                 solicitarNome(nome_leitor);
               devolverLivro(livroEncontrado, nome_leitor);
+              pausarEContinuar();
                 break;
 
             case 12:
@@ -176,13 +196,14 @@ int main()
               if(!verificaSeLivroExiste(livroEncontrado)){
                   break;
               }
-              printf("quem deseja reservar o livro?:\n");
+              printf("Quem deseja reservar o livro?:\n");
                     solicitarNome(nome_leitor);
               sucesso = reservarLivroEmprestado(livroEncontrado,nome_leitor);
                if (sucesso != -1)
                {
-                 printf("livro registrado com sucesso, posição %d da fila", sucesso + 1);
+                 printf("Livro registrado com sucesso, posição %d da fila", sucesso + 1);
                }
+            pausarEContinuar();
                 break;
                
             case 13:
@@ -194,29 +215,32 @@ int main()
                }
                solicitarNome(nome_leitor);
                solicitarData(&dia,&mes,&ano);
-               printf("quantos dia foram permitidos para esse emprestimo?;\n");
+               printf("Quantos dias foram permitidos para esse emprestimo?;\n");
                if (scanf("%d", &diasPerm) != 1)
                {
-                   printf("entrada invalida, digite apenas numeros\n");
+                   printf("Entrada invalida, digite apenas numeros\n");
                    while (getchar() != '\n');
                    break;
                }
                multa = calcularMultaAtraso(livroEncontrado,nome_leitor,dia,mes,ano,diasPerm);
                if (multa < 0) {
-                printf("leitor nao encontrado.\n");
+                printf("[ERRO] Leitor não encontrado.\n");
                 }
                else if (multa ==0) {
-               printf ("Sem atraso, nenhuma multa a pagar.\n");
+               printf ("Sem atraso. Nenhuma multa a pagar.\n");
                 } else {
-               printf("valor a pagar pelos dias atrasados: %.2f", multa);
+               printf("Valor a pagar pelos dias atrasados: %.2f", multa);
                 }
+            pausarEContinuar();
                 break;
             
             case 14:
                relatorioLivrosMaisEmprestados(acervo, quantidade);
+               pausarEContinuar();
                break;
             case 15:
                estatiscasDoAcervo (acervo, quantidade);
+               pausarEContinuar();
                break;
             case 0:
                 printf ("Deseja salvar o acervo antes de sair? [s/n] : ");
@@ -229,14 +253,17 @@ int main()
                 }
                 if (salvar == 'n')
                 {
-                    printf ("Acervo não salvo!\n");
+                    printf ("Acervo não salvo.\n");
                 }
                 printf("[FECHANDO PROGRAMA...]\n");
                 exit(0);
+               
                 break;
 
             default:
+            printf ("[ERRO]Opção inválida! Digite um número de 0 a 15.\n");
                 break;
+            pausarEContinuar();
             }
         
 

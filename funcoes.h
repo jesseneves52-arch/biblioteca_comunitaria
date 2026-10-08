@@ -26,7 +26,7 @@ typedef struct {
 
 
 
-
+void pausarEContinuar();
 int criarCodigo(Livro acervo[], int quantidade);
 Livro *cadastrarLivro(Livro acervo[], int quantidade);//
 int adicionarAoVetor(Livro **acervo, int *quantidade, Livro novoLivro);//
@@ -52,6 +52,6 @@ void adicionarLeitor(Livro *livro, int indiceOrigem, int indiceDestino);//
 void solicitarNome(char *nomedoLeitor);//
 void solicitarData(int* dia, int *mes, int *ano);//
 int compararDatas(Livro *livro, int diaAtual, int mesAtual,int anoAtual, int indice, int diaPermitidos);//
-void estatiscasDoAcervo (Livro acervo[], int quantidade);
-/*ADD FUNÇÃO CALENDARIO*/
+void estatiscasDoAcervo (Livro acervo[], int quantidade); // funcao extra para mostrar estatisticas do acervo
+void limparTela();
 #endif

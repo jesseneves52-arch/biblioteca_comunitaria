@@ -9,7 +9,7 @@ int anoBissexto(int ano)
 
 void solicitarNome(char *nomedoLeitor)
 {
-     printf("digite o nome do leitor:\n");
+     printf("Digite o nome do leitor:\n");
      scanf(" %49[^\n]", nomedoLeitor);
      while (getchar() != '\n');
 }
@@ -22,7 +22,7 @@ int dataValida(int dia, int mes, int ano)
 }
 void solicitarData(int* dia, int *mes, int *ano)
 { 
-    printf("digite a data formato dd mm aaaa");
+    printf("Digite a data no formato dd mm aaaa:");
     while(1){ 
       if(scanf("%d %d %d", dia, mes, ano) == 3 && dataValida(*dia, *mes, *ano)) {
        while (getchar() != '\n');
@@ -30,25 +30,25 @@ void solicitarData(int* dia, int *mes, int *ano)
         
       }
       else{
-      printf("data invalida, digite novamente no formato dd mm aaaa\n");
+      printf("[ERRO] Data inválida! Digite novamente no formato dd mm aaaa:\n");
       while (getchar() != '\n');  
       }
     }
  }
 
 void codigoLivro(int *codigo){
-     printf("Digite o codigo do livro:\n");
+     printf("\nDigite o código do livro:\n");
 while (1) {
     if (scanf("%d", codigo) == 1) {
         if (*codigo >= 0) { 
             while (getchar() != '\n'); 
             return;
         } else {
-            printf("O codigo nao pode ser negativo. Tente novamente: ");
+            printf("[ERRO] O código não pode ser negativo. Tente novamente: ");
             while (getchar() != '\n');
         }
     } else {
-        printf("Entrada invalida! Digite apenas numeros: ");
+        printf("[ERRO] Entrada inválida! Digite apenas números: ");
         while (getchar() != '\n');
     }
 }
@@ -100,3 +100,5 @@ int compararDatas(Livro *livro, int diaAtual, int mesAtual, int anoAtual, int in
  
       return 0;
 }
+
+

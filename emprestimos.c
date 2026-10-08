@@ -209,3 +209,31 @@ void relatorioLivrosMaisEmprestados(Livro acervo[], int quantidade){
     }
 free (copia);
 }
+
+void estatiscasDoAcervo (Livro acervo[], int quantidade){
+    int exemplaresDisponiveis = 0;
+    int emprestimosAtivos = 0;
+    int pessoasNaFila =0;
+    int totalEmprestimos = 0;
+    for (int i=0; i<quantidade; i++){
+        exemplaresDisponiveis += acervo[i].exemplaresDisponiveis;
+        totalEmprestimos += acervo[i].totalEmprestimos;
+
+        for (int j=0; j<acervo[i].quantidadeEmprestimosRegistrados; j++){
+            if (acervo[i].historicoEmprestimos[j].devolvido == 0)
+            {
+                emprestimosAtivos++;
+            }
+                else if (acervo[i].historicoEmprestimos[j].devolvido == 2)
+            {
+                pessoasNaFila++;
+            }
+      }
+}
+    printf ("Estatistica do acervo:\n");
+    printf("Livros cadastrados: %d\n", quantidade);
+    printf("Exemplares disponiveis: %d\n", exemplaresDisponiveis);
+    printf("Emprestimos ativos: %d\n", emprestimosAtivos);
+    printf("Pessoas na fila de espera: %d\n", pessoasNaFila);
+    printf("Total de emprestimos realizados: %d\n", totalEmprestimos);
+}

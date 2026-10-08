@@ -45,6 +45,7 @@ int main()
         printf("[12] - reservar livro\n");
         printf("[13] - calcular multa por atraso de entrega\n");
         printf("[14] - relatorio de livros mais emprestados\n");
+        printf("[15] - Estatísticas do acervo\n");
         printf("[0]- Sair \n");
         printf("digite uma das opcoes..:");
         
@@ -213,6 +214,9 @@ int main()
             
             case 14:
                relatorioLivrosMaisEmprestados(acervo, quantidade);
+               break;
+            case 15:
+               estatiscasDoAcervo (acervo, quantidade);
                break;
             case 0:
                 printf ("Deseja salvar o acervo antes de sair? [s/n] : ");
